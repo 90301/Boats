@@ -20,7 +20,7 @@ public class Main {
 	 */
 	static int simInterval = 20;
 	static int teams = 4;
-	static int initialShips = 1000;
+	static int initialShips = 5000;
 	static boolean ddp = false;
 	static Random rand = new Random();
 	static ArrayList<Ship> ships = new ArrayList<Ship>();
@@ -69,12 +69,20 @@ public class Main {
 						stats.set(i, 0.0);
 					}
 				}
+				/*
 				for (int i = ships.size() - 1; i >= 0; i--) {
 					ships.get(i).targeted = 0;
 				}
+				*/
+				ships.forEach(i -> i.targeted = 0);
+				/*
 				for (int i = ships.size() - 1; i >= 0; i--) {
 					ships.get(i).doTick();
 				}
+				*/
+				ships.forEach(x -> x.doTick());
+				
+				
 				for (int i = 0; i < trails.size(); i++) {
 					Trail trail = trails.get(i);
 					trail.doTick();
@@ -82,13 +90,24 @@ public class Main {
 						trails.remove(i);
 					}
 				}
-				reStat = false;
+				
+				/*
+				if (trails.size() > 0) {
+				trails.stream().forEach(x -> x.doTick());
+				trails.removeIf(x -> x.time<=0);
+				}
+				*/
+				//reStat = false;
+				
+				reStat = ships.removeIf(x -> x.hp <= 0);
+				/*
 				for (int i = ships.size() - 1; i >= 0; i--) {
 					if (ships.get(i).hp <= 0) {
 						ships.remove(i);
 						reStat = true;
 					}
 				}
+				*/
 				f.repaint();
 				long sleepTime = simInterval + tickStartTime - System.currentTimeMillis();
 				if (sleepTime > 0) {
